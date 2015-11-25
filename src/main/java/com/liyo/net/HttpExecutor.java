@@ -4,7 +4,9 @@ package com.liyo.net;
  * Created by liangyong on 15-11-25.
  */
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import com.liyo.common.HttpResult;
@@ -56,8 +58,18 @@ public class HttpExecutor {
         httpResult.setHttpHeaders(httpMethod.getResponseHeaders());
         // 针对状态码进行处理 (简单起见，只处理返回值为200的状态码)
         if (statusCode == HttpStatus.SC_OK) {
-            byte[] responseBody = httpMethod.getResponseBody();
-            httpResult.setResponseBody(responseBody);
+            InputStream inputStream = httpMethod.getResponseBodyAsStream();
+            if (inputStream == null) {
+                throw new IOException("invalid Response Body.");
+            }
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] b = new byte[4096];
+            for (int n; (n = inputStream.read(b)) != -1; ) {
+                byteArrayOutputStream.write(b, 0, n);
+            }
+            httpResult.setResponseBody(byteArrayOutputStream.toByteArray());
+            byteArrayOutputStream.close();
+            inputStream.close();
         }
         return httpResult;
     }

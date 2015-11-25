@@ -1,7 +1,6 @@
 package com.liyo.common;
 
 import org.apache.commons.httpclient.Header;
-
 import java.util.Arrays;
 
 /**
