@@ -37,109 +37,105 @@ package com.liyo.html;
 //////////////////
 // Java Imports //
 //////////////////
+
 import java.io.*;
 
 /**
  * HTMLReader builds on the BufferedReader, providing methods to read one element
  * at a time
  */
-public class HTMLReader extends BufferedReader
-{
-	protected int posInLine=-1;
-	protected String line;
-	protected HTMLNode node = null;
-	protected String url;
-	/**
-	 * The constructor takes in a reader object, and the url to be read.
-	 */
-	public HTMLReader(Reader in,String url)
-	{
-		super(in);
-		this.url = url;
-	}
-	/**
-	 * This constructor basically overrides the existing constructor in the
-	 * BufferedReader class.
-	 */
+public class HTMLReader extends BufferedReader {
+    protected int posInLine = -1;
+    protected String line;
+    protected HTMLNode node = null;
+    protected String url;
 
-	public HTMLReader(Reader in, int len)
-	{
-		super(in,len);
-	}
-	/**
-	 * Read the next element
-	 * @return HTMLNode - The next node
- 	 */
-	public HTMLNode readElement() throws IOException
-	{
-		if (readNextLine())
-		{
-			//System.out.println("Read Next Line returned true");
-			do
-			{
-				line = getNextLine();
-			}
-			while (line!=null && line.length()==0);
+    /**
+     * The constructor takes in a reader object, and the url to be read.
+     */
+    public HTMLReader(Reader in, String url) {
+        super(in);
+        this.url = url;
+    }
 
-		} else
-		posInLine=node.elementEnd()+1;
-		if (line==null) return null;
-		node = HTMLStringNode.find(this,line,posInLine);
-		if (node!=null) return node;
-		node = HTMLDecTag.find(this,line,posInLine);
-		if (node!=null) return node;
-	node = HTMLRemarkTag.find(this,line,posInLine);
-		if (node!=null) return node;
-	node = HTMLJspTag.find(this,line,posInLine);
-		if (node!=null) return node;
-		node = HTMLTag.find(this,line,posInLine);
-		if (node!=null)
-		{
-			// See if we can identify the node
-			HTMLTag tag = (HTMLTag)node;
-			try
-			{
-				node = tag.scan(url,this);
-				return node;
-			}
-			catch (IOException e)
-			{
-				System.err.println("Error! I/O Exception occurred while reading "+url);
-			}
-		}
-		// If we couldnt get a string, then it is probably an end tag
-		node = HTMLEndTag.find(line,posInLine);
-		if (node!=null) return node;
+    /**
+     * This constructor basically overrides the existing constructor in the
+     * BufferedReader class.
+     */
 
-		return null;
-	}
-	/**
-	 * Do we need to read the next line ?
-	 * @return true - yes/ false - no
-	 */
-	protected boolean readNextLine()
-	{
-		//if (node==null) System.out.println("node=null, posInLine = "+posInLine+" current line = "+line);
-		if (posInLine==-1 || node.elementEnd()+1==line.length())
-				return true;
-		else return false;
-	}
-	/*
-	 * Read the next line
-	 * @return String containing the line
-	 */
-	public String getNextLine()
-	{
-		try
-		{
-			line = readLine();
-			posInLine = 0;
-			return line;
-		}
-		catch (IOException e)
-		{
-			System.err.println("I/O Exception occurred while reading!");
-		}
-		return null;
-	}
+    public HTMLReader(Reader in, int len) {
+        super(in, len);
+    }
+
+    /**
+     * Read the next element
+     *
+     * @return HTMLNode - The next node
+     */
+    public HTMLNode readElement() throws IOException {
+        if (readNextLine()) {
+            //System.out.println("Read Next Line returned true");
+            do {
+                line = getNextLine();
+            }
+            while (line != null && line.length() == 0);
+
+        } else {
+            posInLine = node.elementEnd() + 1;
+        }
+        if (line == null) return null;
+        node = HTMLStringNode.find(this, line, posInLine);
+        if (node != null) return node;
+        node = HTMLDecTag.find(this, line, posInLine);
+        if (node != null) return node;
+        node = HTMLRemarkTag.find(this, line, posInLine);
+        if (node != null) return node;
+        node = HTMLJspTag.find(this, line, posInLine);
+        if (node != null) return node;
+        node = HTMLTag.find(this, line, posInLine);
+        if (node != null) {
+            // See if we can identify the node
+            HTMLTag tag = (HTMLTag) node;
+            try {
+                node = tag.scan(url, this);
+                return node;
+            } catch (IOException e) {
+                System.err.println("Error! I/O Exception occurred while reading " + url);
+            }
+        }
+        // If we couldn't get a string, then it is probably an end tag
+        node = HTMLEndTag.find(line, posInLine);
+        if (node != null) return node;
+
+        return null;
+    }
+
+    /**
+     * Do we need to read the next line ?
+     *
+     * @return true - yes/ false - no
+     */
+    protected boolean readNextLine() {
+        //if (node==null) System.out.println("node=null, posInLine = "+posInLine+" current line = "+line);
+        if (posInLine == -1 || node.elementEnd() + 1 == line.length()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /*
+     * Read the next line
+     * @return String containing the line
+     */
+    public String getNextLine() {
+        try {
+            line = readLine();
+            posInLine = 0;
+            return line;
+        } catch (IOException e) {
+            System.err.println("I/O Exception occurred while reading!");
+        }
+        return null;
+    }
 }

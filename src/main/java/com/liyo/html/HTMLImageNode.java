@@ -53,38 +53,38 @@ package com.liyo.html;
 // 2-1-17-6F, Sakamoto Bldg., Moto Azabu, Minato ku, Tokyo, 106 0046, JAPAN
 
 /**
- * Identifies an image tag 
+ * Identifies an image tag
  */
-public class HTMLImageNode extends HTMLTag
-{
-	/**
-	 * The URL where the image is stored.
-	 */
-	protected String imageURL;
-	/**
-	 * Constructor creates an HTMLImageNode object, which stores the location
-	 * where the image is to be found.
-	 * @imageURL location of the image
-	 * @imageBegin Beginning position of the image tag
-	 * @imageEnd Ending position of the image tag
-	 */
-	public HTMLImageNode(String imageURL,int imageBegin, int imageEnd)
-	{
-		super(imageBegin,imageEnd,"");
-		this.imageURL = imageURL;
-	}
-	/**
-	 * Returns the location of the image
-	 */
-	public String getImageLocation()
-	{
-		return imageURL;
-	}
-	/**
-	 * Print the contents of the HTMLImageNode
-	 */
-	public void print()
-	{
-		System.out.println("HTMLImageNode : Image at "+imageURL+"; begins at : "+elementBegin()+"; ends at : "+elementEnd());
-	}
+public class HTMLImageNode extends HTMLTag {
+    /**
+     * The URL where the image is stored.
+     */
+    protected String imageURL;
+
+    /**
+     * Constructor creates an HTMLImageNode object, which stores the location
+     * where the image is to be found.
+     *
+     * @imageURL location of the image
+     * @imageBegin Beginning position of the image tag
+     * @imageEnd Ending position of the image tag
+     */
+    public HTMLImageNode(String imageURL, int imageBegin, int imageEnd) {
+        super(imageBegin, imageEnd, "");
+        this.imageURL = imageURL;
+    }
+
+    /**
+     * Returns the location of the image
+     */
+    public String getImageLocation() {
+        return imageURL;
+    }
+
+    /**
+     * Print the contents of the HTMLImageNode
+     */
+    public void print() {
+        System.out.println("HTMLImageNode : Image at " + imageURL + "; begins at : " + elementBegin() + "; ends at : " + elementEnd());
+    }
 }

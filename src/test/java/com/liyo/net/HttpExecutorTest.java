@@ -1,11 +1,17 @@
 package com.liyo.net;
 
 import com.liyo.common.HttpResult;
+import com.liyo.html.HTMLNode;
+import com.liyo.html.HTMLParser;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Enumeration;
 
 /**
  * Created by liangyong on 15-11-25.
@@ -30,5 +36,24 @@ public class HttpExecutorTest {
             }
         }
         Assert.assertTrue(isLocation);
+    }
+
+    @Test
+    public void testHtmlParser() throws Exception{
+        String url = "http://www.sohu.com";
+        HttpResult httpResult = HttpExecutor.downloadPageGet(url);
+        Assert.assertEquals(HttpStatus.SC_OK, httpResult.getStatusCode());
+        Assert.assertTrue(httpResult.getHttpHeaders().length > 0);
+        Assert.assertNotNull(httpResult.getResponseBody());
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(httpResult.getResponseBody());
+        for(Header header: httpResult.getHttpHeaders()){
+            System.out.println(header);
+        }
+        HTMLParser htmlParser = new HTMLParser(byteArrayInputStream, url, null);
+        Enumeration  htmlEnumeration = htmlParser.elements();
+        while(htmlEnumeration.hasMoreElements()){
+            HTMLNode htmlNode = (HTMLNode)htmlEnumeration.nextElement();
+            htmlNode.print();
+        }
     }
 }

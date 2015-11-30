@@ -53,67 +53,70 @@ package com.liyo.html;
 // 2-1-17-6F, Sakamoto Bldg., Moto Azabu, Minato ku, Tokyo, 106 0046, JAPAN
 
 /**
- * Identifies a link tag 
+ * Identifies a link tag
  */
-public class HTMLLinkNode extends HTMLTag
-{
+public class HTMLLinkNode extends HTMLTag {
 	/**
-	 * The URL where the link points to
-	 */	
-	protected String link;
-	/**
-	 * The text of of the link tag
-	 */
-	protected String linkText;
-	/**
-	 * The accesskey existing inside this link.
-	 */
-	protected String accessKey;
-	/**
-	 * Constructor creates an HTMLLinkNode object, which basically stores the location
-	 * where the link points to, and the text it contains.
-	 * @link The URL to which the link points to
-	 * @linkText The text which is stored inside this link tag
-	 * @linkBegin The beginning position of the link tag
-	 * @linkEnd The ending position of the link tag
-	 * @accessKey The accessKey element of the link tag (valid for Compact HTML - IMODE devices)
-	 */
-	public HTMLLinkNode(String link,String linkText,int linkBegin, int linkEnd, String accessKey)
-	{
-		super(linkBegin,linkEnd,"");
-		this.link = link;
-		this.linkText = linkText;
-		this.accessKey = accessKey;
-	}
-	/**
-	 * Returns the accesskey element if any inside this link tag
-   */
-	public String getAccessKey()
-	{
-		return accessKey;
-	}
-	/**
-	 * Returns the url as a string, to which this link points
-	 */
-	public String getLink()
-	{
-		return link;
-	}
-	/**
-	 * Returns the text contained inside this link tag
-	 */
-	public String getLinkText()
-	{
-		return linkText;
-	}
-	/**
-	 * Print the contents of this Link Node
-	 */
-	public void print()
-	{
-		System.out.print("Link to : "+link + "; titled : "+linkText+"; begins at : "+elementBegin()+"; ends at : "+elementEnd()+ ", AccessKey=");
-		if (accessKey==null) System.out.println("null");
-		else System.out.println(accessKey);
-	}
-	
+     * The URL where the link points to
+     */
+    protected String link;
+    /**
+     * The text of of the link tag
+     */
+    protected String linkText;
+    /**
+     * The accesskey existing inside this link.
+     */
+    protected String accessKey;
+
+    /**
+     * Constructor creates an HTMLLinkNode object, which basically stores the location
+     * where the link points to, and the text it contains.
+     *
+     * @link The URL to which the link points to
+     * @linkText The text which is stored inside this link tag
+     * @linkBegin The beginning position of the link tag
+     * @linkEnd The ending position of the link tag
+     * @accessKey The accessKey element of the link tag (valid for Compact HTML - IMODE devices)
+     */
+    public HTMLLinkNode(String link, String linkText, int linkBegin, int linkEnd, String accessKey) {
+        super(linkBegin, linkEnd, "");
+        this.link = link;
+        this.linkText = linkText;
+        this.accessKey = accessKey;
+    }
+
+    /**
+     * Returns the accesskey element if any inside this link tag
+     */
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    /**
+     * Returns the url as a string, to which this link points
+     */
+    public String getLink() {
+        return link;
+    }
+
+    /**
+     * Returns the text contained inside this link tag
+     */
+    public String getLinkText() {
+        return linkText;
+    }
+
+    /**
+     * Print the contents of this Link Node
+     */
+    public void print() {
+        System.out.print("Link to : " + link + "; titled : " + linkText + "; begins at : " + elementBegin() + "; ends at : " + elementEnd() + ", AccessKey=");
+		if (accessKey == null) {
+			System.out.println("null");
+		} else {
+			System.out.println(accessKey);
+		}
+    }
+
 }

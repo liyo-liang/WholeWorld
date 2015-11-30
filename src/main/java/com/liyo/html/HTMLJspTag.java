@@ -75,123 +75,116 @@ package com.liyo.html;
 /**
  * The JSP/ASP tags like &lt;%...%&gt; can be identified by this class.
  */
-public class HTMLJspTag implements HTMLNode
-{
+public class HTMLJspTag implements HTMLNode {
 	/**
-	 * Tag contents will have the contents of the comment tag.
-   */
-	String tagContents;
-	/**
-	 * The beginning position of the tag in the line
-	 */
-	int tagBegin;
-	/**
-	 * The ending position of the tag in the line
-	 */
-	int tagEnd;
-	/**
-	 * The HTMLJspTag is constructed by providing the beginning posn, ending posn
-	 * and the tag contents.
-	 * @param tagBegin beginning position of the tag
-	 * @param tagEnd ending position of the tag
-	 * @param tagContents contents of the remark tag
-	 */
-	public HTMLJspTag(int tagBegin, int tagEnd, String tagContents)
-	{
-		this.tagBegin = tagBegin;
-		this.tagEnd = tagEnd;
-		this.tagContents = tagContents;
-	}
-	/**
-	 * Returns the text contents of the comment tag.
-	 */
-	public String getText()
-	{
-		return this.tagContents;
-	}
-	/**
-	 * Returns the beginning position of the tag.
-	 */
-	public int elementBegin()
-	{
-		return tagBegin;
-	}
-	/**
-	 * Returns the ending position fo the tag
-	 */
-	public int elementEnd()
-	{
-		return tagEnd;
-	}
-	/**
-	 * Locate the remark tag withing the input string, by parsing from the given position
-	 * @param reader HTML reader to be provided so as to allow reading of next line
-	 * @param input Input String
-	 * @param position Position to start parsing from
-	 */
-	public static HTMLJspTag find(HTMLReader reader,String input,int position)
-	{
-		int state = 0;
-		StringBuffer tagContent = new StringBuffer();
-		int tagBegin=0;
-		int tagEnd=0;
-		int i=position;
-		while (i<input.length() && state!=7)
-		{
-			if (input.charAt(i)=='/' && input.charAt(i-1)=='<' )
-			{
-	  	state = 8;
-		}
-			// The case when the end of the line is reached, but the state is stuck 
-			// in state 2, signifies that this is not a JSP tag. To represent this case,
-		// I have added the OR clause in the conditional
-		if (state==2 && (input.charAt(i)=='<' || input.charAt(i)=='>'))
-	  {
-	  	state = 8;
-	  }
-			if (state==3 && input.charAt(i)=='>')
-			{
-				state=7;
-			  tagEnd=i;
-			}
-			if (state==3)
-			{
-	  	tagContent.append(input.charAt(i));
-			}
-			if (state==8)
-			{
-	  	return null;
-			}
-			if (state==2 && (input.charAt(i)=='%' || input.charAt(i)=='@'))
-			{
-	  	state=3;
-		tagContent.append(input.charAt(i));
-			}
+     * Tag contents will have the contents of the comment tag.
+     */
+    String tagContents;
+    /**
+     * The beginning position of the tag in the line
+     */
+    int tagBegin;
+    /**
+     * The ending position of the tag in the line
+     */
+    int tagEnd;
 
-			if (input.charAt(i)=='<' && state==0)
-			{
-		// Transition from State 0 to State 1 - Record data till > is encountered
-		tagBegin = i;
-		state = 2;
-			}
-			if (state>1 && state!=7 && i==input.length()-1)
-			{
-		// We need to continue parsing to the next line
-		input = reader.getNextLine();
-		i=-1;
-			}
-			i++;
+    /**
+     * The HTMLJspTag is constructed by providing the beginning posn, ending posn
+     * and the tag contents.
+     *
+     * @param tagBegin beginning position of the tag
+     * @param tagEnd ending position of the tag
+     * @param tagContents contents of the remark tag
+     */
+    public HTMLJspTag(int tagBegin, int tagEnd, String tagContents) {
+        this.tagBegin = tagBegin;
+        this.tagEnd = tagEnd;
+        this.tagContents = tagContents;
+    }
+
+    /**
+     * Returns the text contents of the comment tag.
+     */
+    public String getText() {
+        return this.tagContents;
+    }
+
+    /**
+     * Returns the beginning position of the tag.
+     */
+    public int elementBegin() {
+        return tagBegin;
+    }
+
+    /**
+     * Returns the ending position fo the tag
+     */
+    public int elementEnd() {
+        return tagEnd;
+    }
+
+    /**
+     * Locate the remark tag withing the input string, by parsing from the given position
+     *
+     * @param reader HTML reader to be provided so as to allow reading of next line
+     * @param input Input String
+     * @param position Position to start parsing from
+     */
+    public static HTMLJspTag find(HTMLReader reader, String input, int position) {
+        int state = 0;
+        StringBuffer tagContent = new StringBuffer();
+        int tagBegin = 0;
+        int tagEnd = 0;
+        int i = position;
+        while (i < input.length() && state != 7) {
+            if (input.charAt(i) == '/' && input.charAt(i - 1) == '<') {
+                state = 8;
+            }
+            // The case when the end of the line is reached, but the state is stuck
+            // in state 2, signifies that this is not a JSP tag. To represent this case,
+            // I have added the OR clause in the conditional
+            if (state == 2 && (input.charAt(i) == '<' || input.charAt(i) == '>')) {
+                state = 8;
+            }
+            if (state == 3 && input.charAt(i) == '>') {
+                state = 7;
+                tagEnd = i;
+            }
+            if (state == 3) {
+                tagContent.append(input.charAt(i));
+            }
+            if (state == 8) {
+                return null;
+            }
+            if (state == 2 && (input.charAt(i) == '%' || input.charAt(i) == '@')) {
+                state = 3;
+                tagContent.append(input.charAt(i));
+            }
+
+            if (input.charAt(i) == '<' && state == 0) {
+                // Transition from State 0 to State 1 - Record data till > is encountered
+                tagBegin = i;
+                state = 2;
+            }
+            if (state > 1 && state != 7 && i == input.length() - 1) {
+                // We need to continue parsing to the next line
+                input = reader.getNextLine();
+                i = -1;
+            }
+            i++;
+        }
+		if (state == 7) {
+			return new HTMLJspTag(tagBegin, tagEnd, tagContent.toString());
+		} else {
+			return null;
 		}
-		if (state==7)
-		    return new HTMLJspTag(tagBegin,tagEnd,tagContent.toString());
-		else
-		return null;
-	}
-	/**
-	 * Print the contents of the remark tag.
-	 */
-	public void print()
-	{
-		System.out.println("JSP/ASP Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd());
-	}
+    }
+
+    /**
+     * Print the contents of the remark tag.
+     */
+    public void print() {
+        System.out.println("JSP/ASP Tag : " + tagContents + "; begins at : " + elementBegin() + "; ends at : " + elementEnd());
+    }
 }

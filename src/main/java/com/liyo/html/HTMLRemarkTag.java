@@ -55,131 +55,121 @@ package com.liyo.html;
 /**
  * The remark tag is identified and represented by this class.
  */
-public class HTMLRemarkTag implements HTMLNode
-{
-	/**
-	 * Tag contents will have the contents of the comment tag.
-   */
-	String tagContents;
-	/** 
-	 * The beginning position of the tag in the line
-	 */
-	int tagBegin;
-	/**
-	 * The ending position of the tag in the line
-	 */
-	int tagEnd;
-	/**
-	 * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
-	 * and the tag contents.
-	 * @param tagBegin beginning position of the tag
-	 * @param tagEnd ending position of the tag
-	 * @param tagContents contents of the remark tag
-	 */
-	public HTMLRemarkTag(int tagBegin, int tagEnd, String tagContents)
-	{
-		this.tagBegin = tagBegin;
-		this.tagEnd = tagEnd;
-		this.tagContents = tagContents;
-	}
-	/** 
-	 * Returns the text contents of the comment tag.
-	 */
-	public String getText()
-	{
-		return tagContents;
-	}
-	/**
-	 * Returns the beginning position of the tag.
-	 */
-	public int elementBegin()
-	{
-		return tagBegin;
-	}
-	/**
-	 * Returns the ending position fo the tag
-	 */
-	public int elementEnd()
-	{
-		return tagEnd;
-	}
-	/**
-	 * Locate the remark tag withing the input string, by parsing from the given position
-	 * @param reader HTML reader to be provided so as to allow reading of next line
-	 * @param input Input String
-	 * @param position Position to start parsing from
-	 */	
-	public static HTMLRemarkTag find(HTMLReader reader,String input,int position)
-	{
-		int state = 0;
-		String tagContents = "";
-		int tagBegin=0;
-		int tagEnd=0;
-		int i=position;
-		while (i<input.length() && state!=7)
-		{
-			if (input.charAt(i)=='/' && input.charAt(i-1)=='<')
-			{
-				state = 8;
-			}
-			if (state==6 && input.charAt(i)=='>')
-			{
-				state=7;
-				tagEnd=i;
-			}
-			if (state==5 && input.charAt(i)=='-')
-			{
-				state=6;
-			}
-			if (state==4 && input.charAt(i)=='-')
-			{
-				state=5;
-			}		
-			if (state==4)
-			{
-				tagContents+=input.charAt(i);		
-			}
-			if (state==8)
-			{
-				return null;
-			}
-			
-			if (state==3 && input.charAt(i)=='-')
-			{
-				state=4;
-			}
-			if (state==2 && input.charAt(i)=='-')
-			{
-				state=3;
-			}
-			if (state==1 && input.charAt(i)=='!')
-			{
-				state=2;
-			}
-			if (input.charAt(i)=='<' && state==0)
-			{
-				// Transition from State 0 to State 1 - Record data till > is encountered
-				tagBegin = i;
-				state = 1;
-			}
-			if (state>1 && state!=7 && i==input.length()-1)
-			{
-				// We need to continue parsing to the next line
-				input = reader.getNextLine();
-				i=-1;
-			}		
-			i++;
-		}
-		if (state==7)
-		return new HTMLRemarkTag(tagBegin,tagEnd,tagContents);
-		else
-		return null;	
-	}
-	/**
-	 * Print the contents of the remark tag.
-	 */
-	public void print()
-	{
-		System.out.println("Comment Tag : "+tagContents+"; begins at : "+elementBegin()+"; ends at : "+elementEnd());
-	}
+public class HTMLRemarkTag implements HTMLNode {
+    /**
+     * Tag contents will have the contents of the comment tag.
+     */
+    String tagContents;
+    /**
+     * The beginning position of the tag in the line
+     */
+    int tagBegin;
+    /**
+     * The ending position of the tag in the line
+     */
+    int tagEnd;
+
+    /**
+     * The HTMLRemarkTag is constructed by providing the beginning posn, ending posn
+     * and the tag contents.
+     *
+     * @param tagBegin beginning position of the tag
+     * @param tagEnd ending position of the tag
+     * @param tagContents contents of the remark tag
+     */
+    public HTMLRemarkTag(int tagBegin, int tagEnd, String tagContents) {
+        this.tagBegin = tagBegin;
+        this.tagEnd = tagEnd;
+        this.tagContents = tagContents;
+    }
+
+    /**
+     * Returns the text contents of the comment tag.
+     */
+    public String getText() {
+        return tagContents;
+    }
+
+    /**
+     * Returns the beginning position of the tag.
+     */
+    public int elementBegin() {
+        return tagBegin;
+    }
+
+    /**
+     * Returns the ending position fo the tag
+     */
+    public int elementEnd() {
+        return tagEnd;
+    }
+
+    /**
+     * Locate the remark tag withing the input string, by parsing from the given position
+     *
+     * @param reader HTML reader to be provided so as to allow reading of next line
+     * @param input Input String
+     * @param position Position to start parsing from
+     */
+    public static HTMLRemarkTag find(HTMLReader reader, String input, int position) {
+        int state = 0;
+        String tagContents = "";
+        int tagBegin = 0;
+        int tagEnd = 0;
+        int i = position;
+        while (i < input.length() && state != 7) {
+            if (input.charAt(i) == '/' && input.charAt(i - 1) == '<') {
+                state = 8;
+            }
+            if (state == 6 && input.charAt(i) == '>') {
+                state = 7;
+                tagEnd = i;
+            }
+            if (state == 5 && input.charAt(i) == '-') {
+                state = 6;
+            }
+            if (state == 4 && input.charAt(i) == '-') {
+                state = 5;
+            }
+            if (state == 4) {
+                tagContents += input.charAt(i);
+            }
+            if (state == 8) {
+                return null;
+            }
+
+            if (state == 3 && input.charAt(i) == '-') {
+                state = 4;
+            }
+            if (state == 2 && input.charAt(i) == '-') {
+                state = 3;
+            }
+            if (state == 1 && input.charAt(i) == '!') {
+                state = 2;
+            }
+            if (input.charAt(i) == '<' && state == 0) {
+                // Transition from State 0 to State 1 - Record data till > is encountered
+                tagBegin = i;
+                state = 1;
+            }
+            if (state > 1 && state != 7 && i == input.length() - 1) {
+                // We need to continue parsing to the next line
+                input = reader.getNextLine();
+                i = -1;
+            }
+            i++;
+        }
+        if (state == 7) {
+            return new HTMLRemarkTag(tagBegin, tagEnd, tagContents);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Print the contents of the remark tag.
+     */
+    public void print() {
+        System.out.println("Comment Tag : " + tagContents + "; begins at : " + elementBegin() + "; ends at : " + elementEnd());
+    }
 }

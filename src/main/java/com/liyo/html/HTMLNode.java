@@ -55,18 +55,19 @@ package com.liyo.html;
 /**
  * A HTMLNode interface is implemented by all types of nodes (tags, string elements, etc)
  */
-public interface HTMLNode
-{
-	/**
-	 * Print the contents of the html node
-	 */
-	public void print();
-	/**
-	 * Return the beginning position of the element
-	 */
-	public int elementBegin();
-	/**
-	 * Return the ending position of the element
-	 */
-	public int elementEnd();
+public interface HTMLNode {
+    /**
+     * Print the contents of the html node
+     */
+    public void print();
+
+    /**
+     * Return the beginning position of the element
+     */
+    public int elementBegin();
+
+    /**
+     * Return the ending position of the element
+     */
+    public int elementEnd();
 }
